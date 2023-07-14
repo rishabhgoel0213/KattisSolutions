@@ -24,34 +24,25 @@ public class Agario
 
         for(int i = 0; i < n; i++)
         {
-            Map<Set<Integer>, Integer> eatingOrder;
-            Map<Set<Integer>, Integer> newEatingOrder = new HashMap<>();
-            newEatingOrder.put(new HashSet<>(Arrays.asList(i + 1)), size[i]);
+            Set<Integer> allAdjacentPlayers;
+            Set<Integer> newAdjacentPlayers = adjacentPlayers.get(i + 1);
+            Set<Integer> allEaten = new HashSet<>();
+            allEaten.add(i + 1);
             int maxSize = size[i];
-            while(!newEatingOrder.isEmpty())
+            while(!newAdjacentPlayers.isEmpty())
             {
-                eatingOrder = newEatingOrder;
-                System.out.println(newEatingOrder);
-                newEatingOrder = new HashMap<>();
-                for (Set<Integer> path : eatingOrder.keySet())
+                allAdjacentPlayers = newAdjacentPlayers;
+                System.out.print(allAdjacentPlayers + " ");
+                newAdjacentPlayers = new HashSet<>();
+                for (int player : allAdjacentPlayers)
                 {
-                    Set<Integer> allAdjacentPlayers = new HashSet<>();
-                    for(int key : path)
+                    if (size[player - 1] <= maxSize)
                     {
-                        allAdjacentPlayers.addAll(adjacentPlayers.get(key));
-                    }
-                    path.forEach(allAdjacentPlayers::remove);
-                    for (int player : allAdjacentPlayers)
-                    {
-                        if (size[player - 1] <= eatingOrder.get(path))
-                        {
-                            Set<Integer> newPath = new HashSet<>(path);
-                            newPath.add(player);
-                            int newSize = eatingOrder.get(path) + size[player - 1];
-                            if(newSize > maxSize) maxSize = newSize;
-                            newEatingOrder.put(newPath, newSize);
-
-                        }
+                        newAdjacentPlayers.addAll(allAdjacentPlayers);
+                        newAdjacentPlayers.addAll(adjacentPlayers.get(player));
+                        allEaten.add(player);
+                        newAdjacentPlayers.removeAll(allEaten);
+                        maxSize = maxSize + size[player - 1];
                     }
                 }
             }
