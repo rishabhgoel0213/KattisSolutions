@@ -18,35 +18,31 @@ public class Agario
             int v = in.nextInt();
             adjacentPlayers.putIfAbsent(u, new HashSet<>());
             adjacentPlayers.putIfAbsent(v, new HashSet<>());
+
             adjacentPlayers.get(u).add(v);
             adjacentPlayers.get(v).add(u);
         }
-
         for(int i = 0; i < n; i++)
         {
-            Set<Integer> allAdjacentPlayers;
-            Set<Integer> newAdjacentPlayers = adjacentPlayers.get(i + 1);
+            Set<Integer> updatedPlayers = new HashSet<>(adjacentPlayers.get(i + 1));
+            Iterator<Integer> it = updatedPlayers.iterator();
             Set<Integer> allEaten = new HashSet<>();
             allEaten.add(i + 1);
             int maxSize = size[i];
-            while(!newAdjacentPlayers.isEmpty())
+            int player;
+            while(it.hasNext())
             {
-                allAdjacentPlayers = newAdjacentPlayers;
-                System.out.print(allAdjacentPlayers + " ");
-                newAdjacentPlayers = new HashSet<>();
-                for (int player : allAdjacentPlayers)
+                player = it.next();
+                if (size[player - 1] <= maxSize)
                 {
-                    if (size[player - 1] <= maxSize)
-                    {
-                        newAdjacentPlayers.addAll(allAdjacentPlayers);
-                        newAdjacentPlayers.addAll(adjacentPlayers.get(player));
-                        allEaten.add(player);
-                        newAdjacentPlayers.removeAll(allEaten);
-                        maxSize = maxSize + size[player - 1];
-                    }
+                    allEaten.add(player);
+                    updatedPlayers.addAll(adjacentPlayers.get(player));
+                    updatedPlayers.removeAll(allEaten);
+                    maxSize = maxSize + size[player - 1];
+                    it = updatedPlayers.iterator();
                 }
             }
-            System.out.println(maxSize + " ");
+            System.out.print(maxSize + " ");
         }
 
     }
