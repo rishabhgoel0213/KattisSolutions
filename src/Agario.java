@@ -12,6 +12,7 @@ public class Agario
     }
     public static void main(String[] args)
     {
+        final long startTime = System.currentTimeMillis();
         Scanner in = new Scanner(System.in);
         int n = in.nextInt();
         int m = in.nextInt();
@@ -53,8 +54,8 @@ public class Agario
 //                maxSizeArr[v - 1] += size[u - 1];
 //            }
         }
-        System.out.println(adjacentPlayers);
-        System.out.println(Arrays.toString(size));
+//        System.out.println(adjacentPlayers);
+//        System.out.println(Arrays.toString(size));
 //        System.out.println(Arrays.toString(maxSizeArr));
         for(int i = 0; i < n; i++)
         {
@@ -80,8 +81,9 @@ public class Agario
                 }
                 else break;
             }
-            System.out.print(maxSize + " ");
+//            System.out.print(maxSize + " ");
         }
-
+        final long endTime = System.currentTimeMillis();
+        System.out.print(endTime - startTime);
     }
 }

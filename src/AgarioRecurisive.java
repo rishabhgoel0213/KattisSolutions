@@ -13,28 +13,27 @@ public class AgarioRecurisive
     public static int findMaxSize(int start, int currSize, Set<Integer> visited)
     {
         visited.add(start);
-        System.out.println("Solving for " + start + " (" + maxSize[start - 1] + ")");
+//        System.out.println("Solving for " + start + " (" + maxSize[start - 1] + ")");
         for(int adjacent : adjacentPlayers.get(start))
         {
-            if(!eaten.get(start).contains(adjacent))
+            if(size[adjacent - 1] <= maxSize[start - 1] && !eaten.get(start).contains(adjacent))
             {
-                if (size[adjacent - 1] <= maxSize[start - 1])
-                {
-                    System.out.print(" Subproblem of " + start + " (" + maxSize[start - 1] + ")" + ": ");
-                    eaten.get(start).add(adjacent);
-                    maxSize[start - 1] = findMaxSize(adjacent, maxSize[start - 1] + size[adjacent - 1], new HashSet<>(Arrays.asList(start)));
-                }
+//                System.out.print(" Subproblem of " + start + " (" + maxSize[start - 1] + ")" + ": ");
+                eaten.get(start).add(adjacent);
+                maxSize[start - 1] = findMaxSize(adjacent, maxSize[start - 1] + size[adjacent - 1], eaten.get(adjacent));
             }
             if (size[adjacent - 1] <= currSize && !visited.contains(adjacent))
             {
-                System.out.print(" Subproblem: ");
-                currSize = findMaxSize(adjacent, currSize + maxSize[adjacent - 1], new HashSet<>(visited));
+//                System.out.print(" Subproblem: ");
+                visited.add(adjacent);
+                currSize = findMaxSize(adjacent, currSize + size[adjacent - 1], visited);
             }
         }
         return currSize;
     }
     public static void main(String[] args)
     {
+        final long startTime = System.currentTimeMillis();
         Scanner in = new Scanner(System.in);
         int n = in.nextInt();
         int m = in.nextInt();
@@ -59,11 +58,13 @@ public class AgarioRecurisive
             adjacentPlayers.get(u).add(v);
         }
 
-        System.out.println(adjacentPlayers);
+//        System.out.println(adjacentPlayers);
         for(int i = 1; i <= n; i++)
         {
             findMaxSize(i, maxSize[i - 1], new HashSet<>());
-            System.out.println(eaten.get(i) + " " + maxSize[i - 1] + " ");
+            System.out.print(maxSize[i - 1] + " ");
         }
+        final long endTime = System.currentTimeMillis();
+        System.out.print(endTime - startTime);
     }
 }
